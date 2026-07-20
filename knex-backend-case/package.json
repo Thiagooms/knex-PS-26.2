@@ -10,6 +10,7 @@
   },
   "scripts": {
     "dev": "pnpm --filter api dev",
+    "dev:docs": "pnpm --filter docs dev",
     "start": "pnpm --filter api start",
     "typecheck": "pnpm -r run typecheck",
     "db:generate": "drizzle-kit generate",
