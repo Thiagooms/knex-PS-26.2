@@ -12,3 +12,61 @@ Durante o desenvolvimento, decidi alterar essa organização para uma arquitetur
 Nesse modelo, cada domínio da aplicação é tratado como um pacote independente, contendo suas próprias configurações e dependências, mas permanecendo integrado aos demais dentro de um único repositório. Essa separação favorece a modularização do código, facilita a manutenção e torna a evolução do sistema mais organizada.
 
 Embora essa decisão tenha aumentado a complexidade do desenvolvimento e consumido parte do tempo disponível, considerei que o ganho técnico e o aprendizado obtido justificavam essa escolha, mesmo em um projeto com prazo de apenas três dias.
+
+### O pacote do banco de dados
+
+Com a decisão do monorepo tomada, precisei escolher qual pacote construir primeiro. Escolhi o de banco de dados porque praticamente tudo depende dele.
+
+Esse pacote tem uma responsabilidade só: abrir e manter a conexão com o banco Postgres, e guardar o desenho das tabelas do sistema. Nenhum outro pacote conversa com o banco diretamente, todos passam por ele. Isso é proposital. Se um dia eu trocasse de banco de dados, ou mudasse a forma como uma tabela é desenhada, só esse pacote precisaria mudar.
+
+Além da conexão, esse pacote também disponibiliza um jeito de outros pacotes participarem de uma transação que ele controla, a peça que resolve o problema de garantir que baixar estoque e criar um pedido aconteçam sempre juntos, sem deixar brecha pra inconsistência. Nesse momento o pacote ainda não tinha nenhuma tabela desenhada de verdade, isso entrou numa fase seguinte, quando as regras de negócio de cada módulo foram implementadas.
+
+### O pacote de utilitários compartilhados
+
+Depois do banco de dados, criei o pacote que reúne o que é comum a todos os outros módulos, mas que não é responsabilidade de nenhum deles especificamente.
+
+A primeira coisa foram erros com significado. Em vez de espalhar erros genéricos pelo código, criei classes de erro com nome e propósito claro, por exemplo, um erro específico para "esse produto não tem estoque suficiente" e outro para "esse produto já foi vendido e não pode ser excluído". Cada erro já sabe qual código de status HTTP deve retornar para o cliente da API.
+
+A segunda foi um formato de erro único. Toda vez que a API responde com um erro, seja porque os dados enviados estão errados, seja porque uma regra de negócio foi violada, a resposta segue sempre o mesmo formato. Isso facilita muito a vida de quem for consumir essa API depois, não importa o que deu errado, o formato da resposta é sempre previsível.
+
+A terceira foi a validação de entrada, uma peça que verifica se os dados que chegam numa requisição têm o formato esperado, antes desses dados chegarem na lógica de negócio de cada rota. Ela é genérica o suficiente para ser usada por qualquer rota do sistema, sem repetir código.
+
+Nada disso depende de banco de dados, nem de nenhuma regra específica de autenticação, produto ou pedido, é por isso que esse pacote existe separado dos outros.
+
+### O pacote de autenticação
+
+Com as duas fundações prontas, banco de dados e utilitários compartilhados, comecei os pacotes que representam cada parte visível do sistema. O primeiro foi o de autenticação.
+
+Esse pacote concentra cadastro, login e a proteção das rotas por papel, lembrando que no sistema só existem dois tipos de usuário, cliente e vendedor, e um não pode fazer o que é exclusivo do outro.
+
+Nessa etapa, construí a parte que verifica o acesso, uma peça que confere se quem está fazendo a requisição enviou um token válido, e outra que confere se esse usuário tem o papel certo para aquela ação. São essas duas peças que protegem as rotas dos outros módulos mais para frente, por exemplo, bloqueando um cliente de cadastrar um produto. O cadastro e o login em si, a parte que cria o token na primeira vez, ficaram para uma etapa seguinte, porque a verificação de acesso é usada por praticamente todo o resto do sistema, então fazia sentido ela existir primeiro.
+
+### O pacote de produtos
+
+O terceiro módulo é o catálogo, tudo relacionado aos produtos que a TechMart vende.
+
+Ali entram cadastro, edição, exclusão e consulta de produtos, além do controle de estoque. Duas regras importantes do desafio nascem nesse pacote: um produto que já foi vendido alguma vez não pode ser excluído, e o estoque precisa refletir em tempo real quanto ainda pode ser comprado.
+
+### O pacote de pedidos
+
+O último módulo de negócio é o de pedidos, e ele carrega duas responsabilidades que, à primeira vista, pareciam pedir pacotes separados.
+
+A primeira é óbvia, o fluxo de compra do cliente, que registra o pedido, os itens comprados e o valor total no momento da compra.
+
+A segunda é o painel do vendedor, a listagem de todos os pedidos da loja e o histórico de vendas por produto. Decidi deixar isso dentro do mesmo pacote de pedidos, e não criar um pacote separado para o vendedor, porque o painel não tem nenhum dado ou regra própria, ele só olha para os pedidos que já existem. Criar um pacote só para isso significaria ter um pedaço do sistema inteiro dependente de dois outros sem nunca ser usado por ninguém, sinal de que não era um módulo de verdade.
+
+### Juntando tudo
+
+Com os cinco pacotes no lugar, banco de dados, utilitários, autenticação, produtos e pedidos, faltava a peça que amarra tudo, a aplicação de verdade, que sobe um servidor e escuta requisições.
+
+Essa peça não tem nenhuma regra de negócio própria. O trabalho dela é só pegar o roteador de cada módulo e colocar no lugar certo, as rotas de autenticação em uma rota, as de produto em outra, as de pedido em outra, e o painel do vendedor em outra. Também é ali que fica o tratamento de erro, que pega qualquer coisa que os outros módulos jogarem para cima e transforma numa resposta HTTP com o formato certo.
+
+Nesse ponto, o projeto ainda tinha uma versão antiga, de antes da decisão do monorepo, sobrando no repositório, sem ser usada por nada. Com a aplicação nova funcionando, removi essa versão antiga.
+
+### Ajustando o Docker
+
+A última peça dessa primeira fase foi atualizar a forma como o projeto é empacotado num container Docker, que ainda estava configurado para o formato antigo, de um projeto só.
+
+Antes, o container instalava as dependências de um jeito, compilava o TypeScript para JavaScript, e rodava só o resultado compilado. Depois da mudança, ele instala o workspace inteiro e roda a aplicação direto a partir do código-fonte, sem uma etapa de compilação separada.
+
+Isso é consequência de uma decisão tomada lá no início: como os pacotes se importam uns aos outros direto pelo código-fonte, sem uma etapa de build intermediária entre eles, manter uma compilação separada só para esse container ia adicionar complexidade sem necessidade real, já que não existe nenhum cenário aqui de publicar um pacote separadamente ou rodar em vários lugares diferentes. É uma aplicação só, rodando de um jeito só. Mais simples de manter, ainda mais com um prazo curto pela frente.

@@ -1,0 +1,30 @@
+---
+title: "Capítulo 2, Estruturando o Banco de Dados"
+description: As cinco tabelas que sustentam o sistema, e por que cada uma existe
+---
+
+Com os cinco pacotes de código no lugar, chegou a hora de desenhar as tabelas de verdade. Esse era o próximo passo natural, porque toda regra de negócio que vem depois, cadastro, login, compra, precisa de um lugar para guardar o dado.
+
+### As cinco tabelas, na ordem em que foram desenhadas
+
+Desenhei na ordem de dependência, começando pela tabela que nada mais precisa e terminando na que depende de duas outras ao mesmo tempo:
+
+1. users, cadastro de cliente e vendedor, com papel e senha sempre guardada como hash, nunca em texto puro.
+2. refresh_tokens, os tokens de sessão de longa duração, cada um preso a um usuário.
+3. products, o catálogo da loja, com estoque e a flag already_sold, explicada logo abaixo.
+4. orders, os pedidos feitos pelos clientes, com o valor total congelado no momento da compra.
+5. order_items, os itens de cada pedido, ligando um pedido a um produto, com a quantidade e o preço daquele momento também congelados.
+
+### Uma mudança de convenção no meio do caminho
+
+Até esse ponto, eu vinha nomeando tabela e coluna em português, espelhando o vocabulário da PRD. Parei antes de gerar a primeira migração de verdade para trocar tudo para inglês, o padrão mais comum para identificador de código, nome de tabela, coluna, classe e variável, independente da língua em que a documentação do projeto é escrita. Usuários virou users, pedidos virou orders, o papel cliente virou customer, e assim por diante. As mensagens de erro que a API devolve para o usuário final continuam em português, porque essas duas coisas resolvem problemas diferentes.
+
+### Por que existe um selo permanente de "já foi vendido"
+
+A regra mais delicada do desenho inteiro é a coluna already_sold, em products. Ela existe para resolver um problema bem concreto: um item de pedido guarda uma referência para o produto que foi comprado. Se um produto pudesse ser apagado depois de já ter sido vendido, o histórico de compra do cliente ficaria quebrado ou teria que ser apagado junto, o que a PRD proíbe explicitamente, já que o histórico financeiro de uma compra é permanente.
+
+Por isso, already_sold funciona como um selo colado no produto no momento da primeira venda: nunca é reavaliado, nunca é removido, e não depende de mais nada continuar existindo para fazer sentido. A regra de que pedidos nunca podem ser editados ou apagados, fora do escopo desse projeto, é o que garante que esse selo sempre vai estar protegendo um histórico de verdade.
+
+### Testado contra um banco de verdade
+
+Depois de desenhar o schema, gerei a migração com o Drizzle, subi o Postgres do docker-compose e apliquei a migração de verdade, conferindo tabela por tabela que ficou exatamente como o desenho previa, incluindo todas as chaves estrangeiras entre elas.
