@@ -1,0 +1,76 @@
+---
+title: Rodando o projeto na sua máquina
+description: Passo a passo pra colocar a API no ar localmente
+---
+
+Esse capítulo é diferente dos outros, aqui não tem história, é só o passo
+a passo prático pra rodar o projeto do zero em qualquer máquina.
+
+## O que você precisa ter instalado
+
+- Node.js 22 ou mais novo
+- pnpm
+- Docker e Docker Compose (pro banco de dados)
+
+## 1. Clonar o repositório
+
+```bash
+git clone https://github.com/Thiagooms/knex-PS-26.2.git
+cd knex-PS-26.2/knex-backend-case
+```
+
+## 2. Configurar as variáveis de ambiente
+
+Copia o `.env.example` pra `.env`:
+
+```bash
+cp .env.example .env
+```
+
+O arquivo já vem com valores padrão que funcionam com o `docker-compose.yml`
+do projeto. Se quiser, troca o `JWT_SECRET` por outro valor, só não pode
+ter menos de 32 caracteres.
+
+## 3. Subir o banco de dados
+
+```bash
+docker compose up -d db
+```
+
+Isso sobe um Postgres na porta `5433`, já com usuário e senha combinando
+com o `DATABASE_URL` do `.env.example`.
+
+## 4. Instalar as dependências
+
+Na raiz de `knex-backend-case`, roda:
+
+```bash
+pnpm install
+```
+
+Esse comando instala as dependências de todos os pacotes do monorepo de
+uma vez só.
+
+## 5. Rodar a API
+
+```bash
+pnpm dev
+```
+
+A API sobe em `http://localhost:3000`. Pra confirmar que subiu certo,
+`http://localhost:3000/health` deve responder `{"status":"ok"}`.
+
+## 6. Rodar esse próprio diário (opcional)
+
+Esse site que você tá lendo agora também faz parte do monorepo. Pra rodar
+ele localmente:
+
+```bash
+pnpm dev:docs
+```
+
+## Outros comandos úteis
+
+- `pnpm typecheck`, roda a checagem de tipos em todos os pacotes de uma vez
+- `pnpm db:studio`, abre uma interface visual pra explorar o banco de dados
+- `docker compose up -d`, sobe o banco **e** a API dentro de containers, sem precisar rodar `pnpm dev` na mão

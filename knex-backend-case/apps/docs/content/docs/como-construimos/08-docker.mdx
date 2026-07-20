@@ -1,0 +1,25 @@
+---
+title: "Capítulo 8, Ajustando o Docker"
+description: Fazendo o container entender o novo formato do projeto
+---
+
+> A última peça dessa primeira fase foi atualizar a forma como o projeto é
+empacotado num container Docker, ele ainda tava configurado pro formato
+antigo, de um projeto só.
+
+### O que mudou
+
+Antes, o container instalava as dependências com `npm`, compilava o
+TypeScript pra JavaScript, e rodava só o resultado compilado. Agora, ele
+instala o workspace inteiro com `pnpm` e roda a aplicação direto a partir
+do código-fonte, sem uma etapa de compilação separada.
+
+### Por que abrir mão da compilação
+
+Isso é consequência de uma decisão tomada lá no início, como os pacotes
+se importam uns aos outros direto pelo código-fonte (sem uma etapa de
+build intermediária entre eles), manter uma compilação separada só pra
+esse container ia adicionar complexidade sem necessidade real, não existe
+nenhum cenário aqui de publicar um pacote separadamente ou rodar em
+vários lugares diferentes. É só uma aplicação, rodando de um jeito só.
+Mais simples de manter, ainda mais com um prazo curto pela frente.

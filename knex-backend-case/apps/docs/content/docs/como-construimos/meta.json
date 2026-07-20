@@ -1,0 +1,13 @@
+{
+  "title": "Desenvolvimento",
+  "pages": [
+    "01-por-que-monorepo",
+    "02-pacote-db",
+    "03-pacote-shared",
+    "04-pacote-auth",
+    "05-pacote-products",
+    "06-pacote-orders",
+    "07-juntando-tudo",
+    "08-docker"
+  ]
+}

@@ -1,0 +1,14 @@
+---
+title: "Capítulo 1, Arquitetura Monorepo"
+description: A decisão de organizar o projeto em vários pacotes independentes
+---
+
+### A decisão de organizar o projeto em vários pacotes independentes
+
+O plano inicial era desenvolver toda a aplicação em um único projeto, organizando cada funcionalidade em uma pasta específica, como **autenticação**, **produtos** e **pedidos**. Essa estrutura seria suficiente para atender aos requisitos deste estudo de caso e representaria a alternativa mais simples para um projeto com prazo reduzido.
+
+Durante o desenvolvimento, decidi alterar essa organização para uma arquitetura **modular em monorepo**, abordagem que venho estudando recentemente e que considero uma oportunidade de aprofundar conhecimentos em uma arquitetura amplamente utilizada em sistemas de maior porte.
+
+Nesse modelo, cada domínio da aplicação é tratado como um pacote independente, contendo suas próprias configurações e dependências, mas permanecendo integrado aos demais dentro de um único repositório. Essa separação favorece a modularização do código, facilita a manutenção e torna a evolução do sistema mais organizada.
+
+Embora essa decisão tenha aumentado a complexidade do desenvolvimento e consumido parte do tempo disponível, considerei que o ganho técnico e o aprendizado obtido justificavam essa escolha, mesmo em um projeto com prazo de apenas três dias.

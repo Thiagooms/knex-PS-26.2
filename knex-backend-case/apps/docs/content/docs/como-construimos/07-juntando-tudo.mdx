@@ -1,0 +1,23 @@
+---
+title: "Capítulo 7, Juntando tudo"
+description: A aplicação final, e a hora da verdade
+---
+
+> Com os cinco pacotes no lugar (banco de dados, utilitários, autenticação,
+produtos e pedidos), faltava a peça que amarra tudo, a aplicação de
+verdade, que sobe um servidor e escuta requisições.
+
+### O que essa peça faz
+
+Ela não tem nenhuma regra de negócio própria. O trabalho dela é só pegar
+o roteador de cada módulo e "pendurar" no lugar certo, as rotas de
+autenticação em `/auth`, as de produto em `/products`, as de pedido em
+`/orders`, e o painel do vendedor em `/seller`. Também é aqui que fica o
+tratamento de erro que pega qualquer coisa que os outros módulos jogarem
+pra cima e transforma numa resposta HTTP com o formato certo.
+
+### O momento de remover o rascunho antigo
+
+Até esse ponto, o projeto ainda tinha uma versão antiga, de antes da
+decisão do monorepo, sobrando no repositório, sem ser usada por nada. Com
+a aplicação nova funcionando, essa versão antiga foi removida.
