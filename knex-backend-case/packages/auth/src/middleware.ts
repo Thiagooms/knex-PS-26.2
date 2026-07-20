@@ -5,7 +5,7 @@ import { env } from "./env";
 
 export interface AuthenticatedUser {
   id: string;
-  papel: "cliente" | "vendedor";
+  role: "customer" | "seller";
 }
 
 declare global {
@@ -32,9 +32,9 @@ export function requireAuth(req: Request, _res: Response, next: NextFunction) {
   }
 }
 
-export function requireRole(papel: AuthenticatedUser["papel"]) {
+export function requireRole(role: AuthenticatedUser["role"]) {
   return (req: Request, _res: Response, next: NextFunction) => {
-    if (req.user?.papel !== papel) {
+    if (req.user?.role !== role) {
       throw new AppError("Ação não permitida para o seu papel.", 403);
     }
     next();
