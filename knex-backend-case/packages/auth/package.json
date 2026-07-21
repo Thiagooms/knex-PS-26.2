@@ -11,13 +11,16 @@
     "@techmart/db": "workspace:*",
     "@techmart/shared": "workspace:*",
     "bcrypt": "^6.0.0",
+    "drizzle-orm": "^0.45.2",
     "jsonwebtoken": "^9.0.3",
+    "ms": "^2.1.3",
     "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/ms": "^2.1.0",
     "express": "^5.2.1",
     "typescript": "^7.0.2"
   }

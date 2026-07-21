@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { AppError } from "@techmart/shared";
-import { env } from "./env";
+import { env } from "./config/env";
 
 export interface AuthenticatedUser {
   id: string;
