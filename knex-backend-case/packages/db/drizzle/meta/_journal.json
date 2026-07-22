@@ -6,7 +6,14 @@
       "idx": 0,
       "version": "7",
       "when": 1784566940178,
-      "tag": "0000_rapid_wallflower",
+      "tag": "0000_init_schema",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1784733347705,
+      "tag": "0001_stock_non_negative_check",
       "breakpoints": true
     }
   ]

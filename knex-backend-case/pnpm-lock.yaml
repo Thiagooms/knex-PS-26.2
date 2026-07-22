@@ -189,6 +189,9 @@ importers:
 
   packages/orders:
     dependencies:
+      '@techmart/auth':
+        specifier: workspace:*
+        version: link:../auth
       '@techmart/db':
         specifier: workspace:*
         version: link:../db
@@ -198,6 +201,9 @@ importers:
       '@techmart/shared':
         specifier: workspace:*
         version: link:../shared
+      drizzle-orm:
+        specifier: ^0.45.2
+        version: 0.45.2(@types/pg@8.20.0)(pg@8.22.0)
       zod:
         specifier: ^4.4.3
         version: 4.4.3
