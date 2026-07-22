@@ -1,10 +1,16 @@
-FROM node:22-alpine AS runtime
-WORKDIR /app
+FROM node:22
+
 RUN corepack enable
-COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
+
+WORKDIR /app
+
+COPY pnpm-workspace.yaml pnpm-lock.yaml package.json drizzle.config.ts ./
 COPY packages ./packages
 COPY apps ./apps
-RUN pnpm install --frozen-lockfile
+
+RUN pnpm install --frozen-lockfile --filter=!docs
+
 ENV NODE_ENV=production
 EXPOSE 3000
-CMD ["pnpm", "--filter", "api", "start"]
+
+CMD ["sh", "-c", "pnpm db:migrate && pnpm start"]
