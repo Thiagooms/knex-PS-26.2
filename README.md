@@ -211,7 +211,7 @@ knex-PS-26.2/
 
 ---
 
-## Frontend: WorldScope *(planejado)*
+## Frontend: WorldScope
 
 > O mesmo desafio inclui um case de frontend: a **WorldScope**, uma plataforma de consulta de países consumindo a API pública [RestCountries](https://restcountries.com), com listagem, busca, filtros, página de detalhes e temas claro/escuro/sistema.
 
