@@ -17,7 +17,7 @@ export function App() {
             <Route element={<ProtectedRoute />}>
               <Route element={<AppLayout />}>
                 <Route index element={<CatalogPage />} />
-                <Route path="/products/:id" element={<ProductDetailPage />} />
+                <Route path="/product/:id" element={<ProductDetailPage />} />
               </Route>
             </Route>
           </Routes>

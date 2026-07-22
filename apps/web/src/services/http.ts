@@ -1,7 +1,7 @@
 import type { RefreshResponse } from "../types/api"
 import { clearSession, getAccessToken, getRefreshToken, setTokens } from "./token-storage"
 
-const API_URL = import.meta.env.VITE_API_URL
+const API_URL = import.meta.env.VITE_API_URL ?? ""
 
 export const SESSION_EXPIRED_EVENT = "techmart:session-expired"
 
