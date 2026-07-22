@@ -210,15 +210,3 @@ knex-PS-26.2/
 ```
 
 ---
-
-## Frontend: WorldScope
-
-> O mesmo desafio inclui um case de frontend: a **WorldScope**, uma plataforma de consulta de países consumindo a API pública [RestCountries](https://restcountries.com), com listagem, busca, filtros, página de detalhes e temas claro/escuro/sistema.
-
-A stack prevista acompanha o restante do monorepo: **React / Next.js com TypeScript**. A especificação completa está em [`knex-frontend-case/`](./knex-frontend-case/).
-
-<div align="center">
-
-<img src="https://skillicons.dev/icons?i=react,nextjs,ts,tailwind" alt="Stack frontend" />
-
-</div>
