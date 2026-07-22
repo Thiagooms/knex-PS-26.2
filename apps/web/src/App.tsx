@@ -1,18 +1,25 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { AppLayout } from "./components/app-layout"
+import { ProtectedRoute } from "./components/protected-route"
+import { AuthProvider } from "./contexts/auth-context"
 import { ThemeProvider } from "./contexts/theme-context"
-import { ThemeToggle } from "./components/theme-toggle"
+import { LoginPage } from "./pages/login-page"
 
 export function App() {
   return (
     <ThemeProvider>
-      <div className="app-shell">
-        <header className="app-header">
-          <span className="brand">
-            Tech<span className="brand-accent">Mart</span>
-          </span>
-          <ThemeToggle />
-        </header>
-        <main className="app-main" />
-      </div>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route element={<ProtectedRoute />}>
+              <Route element={<AppLayout />}>
+                <Route index element={null} />
+              </Route>
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </ThemeProvider>
   )
 }
