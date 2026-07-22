@@ -5,6 +5,7 @@ import { AuthProvider } from "./contexts/auth-context"
 import { ThemeProvider } from "./contexts/theme-context"
 import { CatalogPage } from "./pages/catalog-page"
 import { LoginPage } from "./pages/login-page"
+import { ProductDetailPage } from "./pages/product-detail-page"
 
 export function App() {
   return (
@@ -16,6 +17,7 @@ export function App() {
             <Route element={<ProtectedRoute />}>
               <Route element={<AppLayout />}>
                 <Route index element={<CatalogPage />} />
+                <Route path="/products/:id" element={<ProductDetailPage />} />
               </Route>
             </Route>
           </Routes>
