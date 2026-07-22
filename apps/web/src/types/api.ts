@@ -8,12 +8,35 @@ export interface PublicUser {
   createdAt: string
 }
 
+export const PRODUCT_CATEGORIES = [
+  "electronics",
+  "computers",
+  "phones",
+  "accessories",
+  "gaming",
+  "home",
+  "others",
+] as const
+
+export type ProductCategory = (typeof PRODUCT_CATEGORIES)[number]
+
+export const CATEGORY_LABELS: Record<ProductCategory, string> = {
+  electronics: "Eletrônicos",
+  computers: "Computadores",
+  phones: "Celulares",
+  accessories: "Acessórios",
+  gaming: "Games",
+  home: "Casa",
+  others: "Outros",
+}
+
 export interface Product {
   id: string
   name: string
   description: string
   price: string
   stock: number
+  category: ProductCategory
   alreadySold: boolean
   createdAt: string
   updatedAt: string

@@ -15,6 +15,13 @@
       "when": 1784733347705,
       "tag": "0001_stock_non_negative_check",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1784753403185,
+      "tag": "0002_sticky_chamber",
+      "breakpoints": true
     }
   ]
 }

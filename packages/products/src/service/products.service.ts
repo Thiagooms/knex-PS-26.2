@@ -21,15 +21,23 @@ export function createProductsService(repository: ProductsRepository) {
       description: input.description,
       price: input.price.toFixed(2),
       stock: input.stock,
+      category: input.category,
     });
   }
 
   async function update(id: string, input: UpdateProductInput) {
-    const data: Partial<{ name: string; description: string; price: string; stock: number }> = {};
+    const data: Partial<{
+      name: string;
+      description: string;
+      price: string;
+      stock: number;
+      category: UpdateProductInput["category"];
+    }> = {};
     if (input.name !== undefined) data.name = input.name;
     if (input.description !== undefined) data.description = input.description;
     if (input.price !== undefined) data.price = input.price.toFixed(2);
     if (input.stock !== undefined) data.stock = input.stock;
+    if (input.category !== undefined) data.category = input.category;
 
     const product = await repository.update(id, data);
     if (!product) {

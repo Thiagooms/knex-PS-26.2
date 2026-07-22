@@ -1,4 +1,4 @@
-import type { Transaction } from "@techmart/db";
+import type { ProductCategory, Transaction } from "@techmart/db";
 
 export interface ProductRecord {
   id: string;
@@ -6,6 +6,7 @@ export interface ProductRecord {
   description: string;
   price: string;
   stock: number;
+  category: ProductCategory;
   alreadySold: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -19,10 +20,17 @@ export interface ProductsRepository {
     description: string;
     price: string;
     stock: number;
+    category?: ProductCategory;
   }): Promise<ProductRecord>;
   update(
     id: string,
-    data: Partial<{ name: string; description: string; price: string; stock: number }>,
+    data: Partial<{
+      name: string;
+      description: string;
+      price: string;
+      stock: number;
+      category: ProductCategory;
+    }>,
   ): Promise<ProductRecord | undefined>;
   deleteIfNotSold(id: string): Promise<boolean>;
   decrementStock(

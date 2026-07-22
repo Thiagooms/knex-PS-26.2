@@ -19,6 +19,7 @@ export function createFakeProductsRepository(): ProductsRepository {
         createdAt: now,
         updatedAt: now,
         ...data,
+        category: data.category ?? "others",
       };
       products.set(product.id, product);
       return product;
