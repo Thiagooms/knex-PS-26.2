@@ -4,7 +4,6 @@ import type { ThemePreference } from "../contexts/theme-context"
 const OPTIONS: { value: ThemePreference; label: string }[] = [
   { value: "light", label: "Claro" },
   { value: "dark", label: "Escuro" },
-  { value: "system", label: "Sistema" },
 ]
 
 export function ThemeToggle() {

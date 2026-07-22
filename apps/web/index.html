@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TechMart</title>
     <script>
-      const stored = localStorage.getItem("techmart.theme")
-      const dark = matchMedia("(prefers-color-scheme: dark)").matches
       document.documentElement.dataset.theme =
-        stored === "light" || stored === "dark" ? stored : dark ? "dark" : "light"
+        localStorage.getItem("techmart.theme") === "dark" ? "dark" : "light"
     </script>
   </head>
   <body>
