@@ -10,6 +10,9 @@ COPY apps ./apps
 
 RUN pnpm install --frozen-lockfile --filter=!docs
 
+ARG VITE_API_URL=""
+RUN pnpm --filter web build
+
 ENV NODE_ENV=production
 EXPOSE 3000
 

@@ -7,4 +7,5 @@
 .env
 *.log
 infra
-apps/web
+apps/web/doc
+apps/web/DECISIONS.md
